@@ -13,7 +13,15 @@ class Http():
         )
 
     def get(self, url):
-        return self.http.request('GET', url)
+        sanitized_url = self.sanitize_url(url)
+        return self.http.request('GET', sanitized_url)
+
+    @staticmethod
+    def sanitize_url(url):
+        scheme, netloc, path, query, fragment = parse.urlsplit(url)
+        path = parse.quote(path)
+        sanitized_url = parse.urlunsplit((scheme, netloc, path, query, fragment))
+        return sanitized_url
 
 http = Http()
         
